@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "a725fdd2-c881-48f7-aa59-f3c4dc234c02",
+		"name": "Via_CEP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8512018"
+	},
+	"item": [
+		{
+			"name": "Obter dados de endereço",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var body = JSON.parse(responseBody);",
+							"var jsonData = pm.response.json();",
+							"",
+							"var cep = pm.environment.get(\"CEP\");",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Address information is present in reponse body\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"cep\":');",
+							"    pm.expect(pm.response.text()).to.include('\"logradouro\":');",
+							"    pm.expect(pm.response.text()).to.include('\"complemento\":');",
+							"    pm.expect(pm.response.text()).to.include('\"bairro\":');",
+							"    pm.expect(pm.response.text()).to.include('\"localidade\":');",
+							"    pm.expect(pm.response.text()).to.include('\"uf\":');",
+							"    pm.expect(pm.response.text()).to.include('\"ibge\":');",
+							"    pm.expect(pm.response.text()).to.include('\"gia\":');",
+							"    pm.expect(pm.response.text()).to.include('\"ddd\":');",
+							"    pm.expect(pm.response.text()).to.include('\"siafi\":');",
+							"});",
+							"",
+							"pm.test(\"CEP returned is correct\", function(){",
+							"    pm.expect(jsonData.cep).to.eql(cep);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://viacep.com.br/ws/{{CEP}}/json/",
+					"protocol": "https",
+					"host": [
+						"viacep",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"{{CEP}}",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter dados de endereço - CEP incorreto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://viacep.com.br/ws/4476210/json/",
+					"protocol": "https",
+					"host": [
+						"viacep",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"4476210",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter dados de endereço - CEP Vazio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://viacep.com.br/ws/{{CEP_VAZIO}}/json/",
+					"protocol": "https",
+					"host": [
+						"viacep",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"{{CEP_VAZIO}}",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
